@@ -1413,6 +1413,11 @@
     document.getElementById('prevBtn').disabled = i === 0;
     document.getElementById('nextBtn').disabled = i === total - 1;
     document.getElementById('progress').style.width = ((i + 1) / total * 100) + '%';
+    // Update suggest button color based on slide background
+    const btn = document.getElementById('suggestToggle');
+    const isDark = slides[i].classList.contains('slide-title') || slides[i].classList.contains('slide-section') || slides[i].classList.contains('slide-end');
+    btn.style.background = (!btn.classList.contains('active')) ? (isDark ? '#ffffff' : '#2c4a7c') : '#dc2626';
+    btn.style.color = (!btn.classList.contains('active')) ? (isDark ? '#1a2744' : '#ffffff') : '#ffffff';
   }
 
   function go(dir) {
@@ -1456,6 +1461,16 @@
     const btn = document.getElementById('suggestToggle');
     btn.classList.toggle('active', suggestMode);
     btn.textContent = suggestMode ? 'Exit Edit Mode' : 'Suggest Edit';
+    // Re-apply dynamic color
+    const activeSlide = slides[cur];
+    const isDark = activeSlide.classList.contains('slide-title') || activeSlide.classList.contains('slide-section') || activeSlide.classList.contains('slide-end');
+    if (suggestMode) {
+      btn.style.background = '#dc2626';
+      btn.style.color = '#ffffff';
+    } else {
+      btn.style.background = isDark ? '#ffffff' : '#2c4a7c';
+      btn.style.color = isDark ? '#1a2744' : '#ffffff';
+    }
   }
 
   function closeSuggest() {
