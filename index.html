@@ -968,6 +968,7 @@
   <div class="suggest-modal">
     <h3>Suggest an Edit</h3>
     <span class="slide-badge" id="suggestSlide"></span>
+    <span class="slide-badge" id="suggestSurveyBadge" style="display:none;margin-left:8px;background:#eef2ff;color:#3b5998;padding:3px 10px;border-radius:6px;font-weight:600;"></span>
     <label>Original Text</label>
     <div class="original-text" id="suggestOriginal"></div>
     <label>Your Suggested Edit</label>
@@ -1454,9 +1455,11 @@
   show(0);
 
   // ---- Suggest Edit Feature ----
-  const SUGGEST_URL = 'https://script.google.com/macros/s/AKfycbzr9MQbbwMDMP_Vplc-2bHJUbE1S_LCq1svbqea2DGy9p78vQH2cRQhTPzEwUN351qA/exec';
+  const SUGGEST_URL = 'https://script.google.com/macros/s/AKfycbzE3ZmW0rEsGCZjABpqGvQaE53gANDHqlybc7MUbHYofywCD4Xj8yZEiWA5nAeuYkrA/exec';
   let suggestMode = false;
   let selectedOriginal = '';
+  let selectedSurvey = '';
+  let selectedQuestion = '';
 
   function toggleSuggestMode() {
     suggestMode = !suggestMode;
@@ -1497,6 +1500,8 @@
 
     const payload = {
       slide: cur + 1,
+      survey: selectedSurvey,
+      question: selectedQuestion,
       original: selectedOriginal,
       suggestion: suggestion,
       name: document.getElementById('suggestName').value.trim() || 'Anonymous'
@@ -1533,8 +1538,57 @@
     if (!text || text.length < 3) return;
 
     selectedOriginal = text;
-    document.getElementById('suggestOriginal').textContent = text;
+    selectedSurvey = '';
+    selectedQuestion = '';
+
+    // Detect if this is a survey item (inside an items-table row)
+    const row = el.closest('tr');
+    const table = el.closest('.items-table');
+    if (row && table) {
+      const cells = row.querySelectorAll('td');
+      if (cells.length >= 2) {
+        // Extract question number from first cell (strip [R] marker)
+        const qNum = cells[0].textContent.trim().replace(/\s*\[R\]/, '');
+        selectedQuestion = qNum;
+
+        // Determine survey from slide context
+        const activeSlide = slides[cur];
+        const topbar = activeSlide.querySelector('.topbar');
+        const topbarText = topbar ? topbar.textContent : '';
+
+        if (topbarText.includes('Self-Report')) {
+          selectedSurvey = 'A: Self-Report';
+          // Determine domain from question number
+          const n = parseInt(qNum);
+          if (n >= 1 && n <= 14) selectedSurvey += ' — Well-Being';
+          else if (n >= 15 && n <= 22) selectedSurvey += ' — Speech Alignment';
+          else if (n >= 23 && n <= 30) selectedSurvey += ' — Relationship Alignment';
+          else if (n >= 31 && n <= 41) selectedSurvey += ' — Action Alignment';
+        } else if (topbarText.includes('Colleagues')) {
+          selectedSurvey = 'B: Colleagues';
+        } else if (topbarText.includes('Family')) {
+          selectedSurvey = 'C: Family Observer';
+        } else if (topbarText.includes('Pulse')) {
+          selectedSurvey = 'D: Weekly Pulse';
+        }
+
+        // Use the item text (second or third cell depending on table structure)
+        selectedOriginal = cells[cells.length - 1].textContent.trim();
+      }
+    }
+
+    document.getElementById('suggestOriginal').textContent = selectedOriginal;
     document.getElementById('suggestSlide').textContent = 'Slide ' + (cur + 1);
+
+    // Show survey badge if applicable
+    const badge = document.getElementById('suggestSurveyBadge');
+    if (selectedSurvey) {
+      badge.textContent = selectedSurvey + ' — Q' + selectedQuestion;
+      badge.style.display = 'inline-block';
+    } else {
+      badge.style.display = 'none';
+    }
+
     document.getElementById('suggestText').value = '';
     document.getElementById('suggestName').value = '';
     document.getElementById('suggestOverlay').classList.add('open');
