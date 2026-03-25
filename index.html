@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coherence Scale — Presentation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #0a0a0a;
+    color: #1a2744;
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  .deck {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 80px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    background: #ffffff;
+  }
+
+  .slide.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* ---- Slide Layouts ---- */
+
+  .slide-title {
+    background: linear-gradient(135deg, #1a2744 0%, #2c4a7c 100%);
+    color: #fff;
+    text-align: center;
+  }
+  .slide-title h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+  .slide-title .subtitle {
+    font-size: 1.35rem;
+    font-weight: 300;
+    opacity: 0.85;
+    margin-bottom: 48px;
+  }
+  .slide-title .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 56px;
+  }
+  .slide-title .pill {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-size: 0.95rem;
+    font-weight: 400;
+  }
+  .slide-title .meta {
+    font-size: 1rem;
+    opacity: 0.5;
+    font-weight: 400;
+  }
+
+  /* Section header slides */
+  .slide-section {
+    background: linear-gradient(135deg, #2c4a7c 0%, #1a2744 100%);
+    color: #fff;
+    text-align: center;
+  }
+  .slide-section .section-number {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    opacity: 0.5;
+    margin-bottom: 20px;
+  }
+  .slide-section h2 {
+    font-size: 3rem;
+    font-weight: 700;
+  }
+  .slide-section p {
+    max-width: 700px;
+    margin-top: 24px;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    opacity: 0.8;
+    font-weight: 300;
+  }
+
+  /* Content slides */
+  .slide-content {
+    align-items: flex-start;
+    padding: 56px 90px;
+  }
+  .slide-content .topbar {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #2c4a7c;
+    opacity: 0.5;
+    margin-bottom: 12px;
+  }
+  .slide-content h2 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #1a2744;
+    margin-bottom: 32px;
+  }
+  .slide-content h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2c4a7c;
+    margin-bottom: 12px;
+    margin-top: 20px;
+  }
+  .slide-content p, .slide-content li {
+    font-size: 1.1rem;
+    line-height: 1.75;
+    color: #3a4a60;
+    max-width: 1000px;
+  }
+  .slide-content ul {
+    list-style: none;
+    padding: 0;
+  }
+  .slide-content ul li {
+    padding-left: 28px;
+    position: relative;
+    margin-bottom: 10px;
+  }
+  .slide-content ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #2c4a7c;
+  }
+
+  .accent-line {
+    width: 60px;
+    height: 4px;
+    background: #2c4a7c;
+    border-radius: 2px;
+    margin-bottom: 24px;
+  }
+
+  /* Cards grid */
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    width: 100%;
+    max-width: 1050px;
+    margin-top: 8px;
+  }
+  .card {
+    background: #f4f7fc;
+    border-radius: 16px;
+    padding: 28px 30px;
+    border-left: 4px solid #2c4a7c;
+  }
+  .card h4 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1a2744;
+    margin-bottom: 8px;
+  }
+  .card p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #4a5a70;
+  }
+  .card .tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #2c4a7c;
+    background: rgba(44,74,124,0.1);
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+
+  /* Domain color coding */
+  .card.wellbeing { border-left-color: #3b82f6; }
+  .card.wellbeing .tag { color: #3b82f6; background: rgba(59,130,246,0.1); }
+  .card.speech { border-left-color: #8b5cf6; }
+  .card.speech .tag { color: #8b5cf6; background: rgba(139,92,246,0.1); }
+  .card.relationship { border-left-color: #ec4899; }
+  .card.relationship .tag { color: #ec4899; background: rgba(236,72,153,0.1); }
+  .card.action { border-left-color: #f59e0b; }
+  .card.action .tag { color: #f59e0b; background: rgba(245,158,11,0.1); }
+
+  /* Table styles */
+  .slide-table {
+    width: 100%;
+    max-width: 1000px;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-size: 0.95rem;
+  }
+  .slide-table th {
+    background: #1a2744;
+    color: #fff;
+    padding: 12px 18px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .slide-table th:first-child { border-radius: 10px 0 0 0; }
+  .slide-table th:last-child { border-radius: 0 10px 0 0; }
+  .slide-table td {
+    padding: 11px 18px;
+    border-bottom: 1px solid #e8ecf2;
+    color: #3a4a60;
+  }
+  .slide-table tr:nth-child(even) td {
+    background: #f8fafd;
+  }
+  .slide-table .reverse {
+    color: #dc2626;
+    font-weight: 600;
+    font-size: 0.75rem;
+  }
+  .slide-table .domain-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .domain-badge.wb { background: rgba(59,130,246,0.1); color: #3b82f6; }
+  .domain-badge.sa { background: rgba(139,92,246,0.1); color: #8b5cf6; }
+  .domain-badge.ra { background: rgba(236,72,153,0.1); color: #ec4899; }
+  .domain-badge.aa { background: rgba(245,158,11,0.1); color: #f59e0b; }
+  .domain-badge.oc { background: rgba(16,185,129,0.1); color: #10b981; }
+
+  /* Scale visual */
+  .scale-row {
+    display: flex;
+    gap: 0;
+    margin: 24px 0;
+    max-width: 700px;
+  }
+  .scale-item {
+    flex: 1;
+    text-align: center;
+    padding: 20px 10px;
+    color: #fff;
+    font-weight: 600;
+  }
+  .scale-item:first-child { border-radius: 12px 0 0 12px; }
+  .scale-item:last-child { border-radius: 0 12px 12px 0; }
+  .scale-item .num { font-size: 1.8rem; font-weight: 800; }
+  .scale-item .lbl { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; opacity: 0.9; }
+
+  /* Stats row */
+  .stats-row {
+    display: flex;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .stat-box {
+    background: #f4f7fc;
+    border-radius: 12px;
+    padding: 16px 22px;
+    text-align: center;
+    min-width: 120px;
+  }
+  .stat-box .big {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #1a2744;
+  }
+  .stat-box .label {
+    font-size: 0.8rem;
+    color: #6a7a90;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  /* Timeline */
+  .timeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 30px 0;
+    max-width: 900px;
+    width: 100%;
+  }
+  .tl-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    position: relative;
+  }
+  .tl-node::after {
+    content: '';
+    position: absolute;
+    top: 22px;
+    left: 50%;
+    width: 100%;
+    height: 3px;
+    background: #d0d8e8;
+    z-index: 0;
+  }
+  .tl-node:last-child::after { display: none; }
+  .tl-dot {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #2c4a7c;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    z-index: 1;
+    margin-bottom: 10px;
+  }
+  .tl-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #1a2744;
+    text-align: center;
+  }
+  .tl-sub {
+    font-size: 0.68rem;
+    color: #6a7a90;
+    text-align: center;
+    margin-top: 2px;
+  }
+
+  /* Diagram: multi-source */
+  .multi-source {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin: 24px 0;
+  }
+  .source-box {
+    background: #f4f7fc;
+    border-radius: 14px;
+    padding: 22px 28px;
+    text-align: center;
+    min-width: 180px;
+    border: 2px solid #e0e8f4;
+  }
+  .source-box .icon { font-size: 2rem; margin-bottom: 8px; }
+  .source-box .name { font-weight: 700; color: #1a2744; font-size: 1rem; }
+  .source-box .desc { font-size: 0.78rem; color: #6a7a90; margin-top: 4px; }
+  .arrow-right {
+    font-size: 1.5rem;
+    color: #2c4a7c;
+    font-weight: 700;
+  }
+  .center-box {
+    background: linear-gradient(135deg, #1a2744, #2c4a7c);
+    color: #fff;
+    border-radius: 16px;
+    padding: 28px 36px;
+    text-align: center;
+  }
+  .center-box .name { font-weight: 700; font-size: 1.15rem; }
+  .center-box .desc { font-size: 0.8rem; opacity: 0.7; margin-top: 4px; }
+
+  /* Navigation */
+  .nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: rgba(26,39,68,0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    z-index: 100;
+  }
+  .nav-btn {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: #fff;
+    padding: 8px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+  .nav-btn:hover { background: rgba(255,255,255,0.2); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .nav-counter {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: #3b82f6;
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  /* Scrollable content for dense slides */
+  .scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    width: 100%;
+    padding-right: 20px;
+  }
+  .scroll-area::-webkit-scrollbar { width: 4px; }
+  .scroll-area::-webkit-scrollbar-thumb { background: #ccd4e0; border-radius: 4px; }
+
+  /* Compact table for survey items */
+  .items-table {
+    width: 100%;
+    max-width: 960px;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  .items-table th {
+    background: #1a2744;
+    color: #fff;
+    padding: 9px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .items-table th:first-child { border-radius: 8px 0 0 0; }
+  .items-table th:last-child { border-radius: 0 8px 0 0; }
+  .items-table td {
+    padding: 8px 14px;
+    border-bottom: 1px solid #edf0f5;
+    color: #3a4a60;
+    line-height: 1.45;
+  }
+  .items-table tr:nth-child(even) td { background: #f9fafc; }
+
+  .highlight-box {
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    padding: 16px 20px;
+    border-radius: 0 10px 10px 0;
+    margin: 16px 0;
+    max-width: 800px;
+  }
+  .highlight-box p {
+    font-size: 0.95rem;
+    color: #92400e;
+    line-height: 1.6;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  /* End slide */
+  .slide-end {
+    background: linear-gradient(135deg, #1a2744 0%, #2c4a7c 100%);
+    color: #fff;
+    text-align: center;
+  }
+  .slide-end h2 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 32px;
+  }
+  .slide-end ul {
+    list-style: none;
+    text-align: left;
+    max-width: 600px;
+  }
+  .slide-end ul li {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    font-size: 1.1rem;
+    font-weight: 300;
+    opacity: 0.85;
+    padding-left: 24px;
+    position: relative;
+  }
+  .slide-end ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 18px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #3b82f6;
+  }
+
+  /* ---- Mobile Responsive ---- */
+  @media (max-width: 768px) {
+    body {
+      overflow-y: auto;
+      height: auto;
+    }
+
+    .deck {
+      height: auto;
+      min-height: 100vh;
+    }
+
+    .slide {
+      position: relative;
+      display: none;
+      padding: 24px 20px 80px;
+      min-height: 100vh;
+      height: auto;
+      overflow-y: auto;
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    /* Title slide */
+    .slide-title h1 {
+      font-size: 2.2rem;
+    }
+    .slide-title .subtitle {
+      font-size: 1.05rem;
+      margin-bottom: 28px;
+    }
+    .slide-title .pills {
+      margin-bottom: 32px;
+      gap: 8px;
+    }
+    .slide-title .pill {
+      padding: 7px 14px;
+      font-size: 0.8rem;
+    }
+    .slide-title .meta {
+      font-size: 0.85rem;
+    }
+
+    /* Section header slides */
+    .slide-section h2 {
+      font-size: 1.8rem;
+    }
+    .slide-section p {
+      font-size: 1rem;
+    }
+
+    /* Content slides */
+    .slide-content {
+      padding: 24px 20px 80px;
+    }
+    .slide-content h2 {
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+    }
+    .slide-content h3 {
+      font-size: 1.1rem;
+    }
+    .slide-content p, .slide-content li {
+      font-size: 0.95rem;
+    }
+
+    /* Cards grid — single column */
+    .cards {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    .card {
+      padding: 18px 16px;
+    }
+    .card h4 {
+      font-size: 0.95rem;
+    }
+    .card p {
+      font-size: 0.85rem;
+    }
+
+    /* Two-col — single column */
+    .two-col {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    /* Tables — scrollable */
+    .slide-table, .items-table {
+      font-size: 0.78rem;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .slide-table th, .slide-table td,
+    .items-table th, .items-table td {
+      padding: 7px 10px;
+      white-space: nowrap;
+    }
+    .items-table td:last-child,
+    .slide-table td:last-child {
+      white-space: normal;
+      min-width: 200px;
+    }
+
+    /* Stats row — wrap */
+    .stats-row {
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .stat-box {
+      min-width: 90px;
+      padding: 12px 14px;
+    }
+    .stat-box .big {
+      font-size: 1.6rem;
+    }
+    .stat-box .label {
+      font-size: 0.7rem;
+    }
+
+    /* Scale visual */
+    .scale-row {
+      flex-direction: column;
+      max-width: 100%;
+      gap: 0;
+    }
+    .scale-item {
+      padding: 12px 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+    }
+    .scale-item:first-child { border-radius: 12px 12px 0 0; }
+    .scale-item:last-child { border-radius: 0 0 12px 12px; }
+    .scale-item .num { font-size: 1.3rem; min-width: 30px; }
+    .scale-item .lbl { font-size: 0.7rem; margin-top: 0; }
+
+    /* Timeline — compact */
+    .timeline {
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+    .tl-node {
+      flex: 0 0 auto;
+      width: 70px;
+    }
+    .tl-node::after {
+      display: none;
+    }
+    .tl-dot {
+      width: 34px;
+      height: 34px;
+      font-size: 0.7rem;
+    }
+    .tl-label {
+      font-size: 0.6rem;
+    }
+    .tl-sub {
+      font-size: 0.55rem;
+    }
+
+    /* Multi-source diagram — stack */
+    .multi-source {
+      flex-direction: column;
+      gap: 16px;
+      align-items: stretch;
+    }
+    .source-box {
+      min-width: auto;
+      padding: 14px 18px;
+    }
+    .arrow-right {
+      transform: rotate(90deg);
+      align-self: center;
+    }
+    .center-box {
+      padding: 20px 24px;
+    }
+
+    /* Scroll area */
+    .scroll-area {
+      padding-right: 4px;
+    }
+
+    /* Highlight box */
+    .highlight-box {
+      padding: 12px 14px;
+    }
+
+    /* Navigation */
+    .nav {
+      padding: 0 16px;
+      height: 50px;
+    }
+    .nav-btn {
+      padding: 6px 14px;
+      font-size: 0.8rem;
+    }
+    .nav-counter {
+      font-size: 0.8rem;
+    }
+
+    /* End slide */
+    .slide-end h2 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+    }
+    .slide-end ul li {
+      font-size: 0.95rem;
+    }
+
+    /* Accent line */
+    .accent-line {
+      margin-bottom: 16px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<div class="deck" id="deck">
+
+  <!-- SLIDE 1: Title -->
+  <div class="slide slide-title active" data-idx="0">
+    <h1>Coherence Scale</h1>
+    <p class="subtitle">Complete Survey Design Document</p>
+    <div class="pills">
+      <span class="pill">Participant Self-Report (41 items)</span>
+      <span class="pill">Colleagues (8 items)</span>
+      <span class="pill">Family Observer (8 items)</span>
+      <span class="pill">Weekly Pulse (5 items)</span>
+    </div>
+    <p class="meta">Coherence Research Project &mdash; March 2026</p>
+  </div>
+
+  <!-- SLIDE 2: What Is Coherence? -->
+  <div class="slide slide-section" data-idx="1">
+    <p class="section-number">Section 1</p>
+    <h2>What Is the Coherence Scale Measuring?</h2>
+    <p>The degree of alignment between a person's inner life and their outer expression.</p>
+  </div>
+
+  <!-- SLIDE 3: Coherence Defined -->
+  <div class="slide slide-content" data-idx="2">
+    <div class="topbar">What Is Coherence?</div>
+    <h2>Living as Who You Truly Are</h2>
+    <div class="accent-line"></div>
+    <p style="margin-bottom:20px;">Coherence is the experience of living in a way where what you <strong>think</strong>, what you <strong>feel</strong>, what you <strong>believe</strong>, and what you <strong>value</strong> are genuinely reflected in what you <strong>say</strong>, how you <strong>relate</strong>, and what you <strong>do</strong>.</p>
+    <div class="two-col" style="margin-top:20px;">
+      <div>
+        <h3>What coherence is NOT</h3>
+        <ul>
+          <li>Not the same as happiness</li>
+          <li>Not social conformity or agreeableness</li>
+          <li>Not about being pleasant</li>
+        </ul>
+      </div>
+      <div>
+        <h3>What coherence IS</h3>
+        <ul>
+          <li>Inner-outer alignment</li>
+          <li>Felt congruence and integrity</li>
+          <li>Being real, not performing</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Theoretical Roots -->
+  <div class="slide slide-content" data-idx="3">
+    <div class="topbar">What Is Coherence?</div>
+    <h2>Theoretical Foundations</h2>
+    <div class="accent-line"></div>
+    <div class="cards">
+      <div class="card">
+        <h4>Carl Rogers</h4>
+        <p>Concept of congruence: alignment between ideal self, real self, and presented self as a foundation of psychological health.</p>
+      </div>
+      <div class="card">
+        <h4>Self-Determination Theory</h4>
+        <p>Deci & Ryan: autonomous, self-concordant behavior &mdash; acting from one's own values rather than external pressure &mdash; is essential to well-being.</p>
+      </div>
+      <div class="card">
+        <h4>Authenticity Research</h4>
+        <p>Wood, Linley, Maltby & Baliousis: measuring the gap between authentic inner experience and outward self-expression.</p>
+      </div>
+      <div class="card">
+        <h4>Existential Philosophy</h4>
+        <p>Living in alignment with chosen values and confronting the temptation to live inauthentically.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: Why Measure -->
+  <div class="slide slide-section" data-idx="4">
+    <p class="section-number">Section 2</p>
+    <h2>Why Measure Coherence?</h2>
+    <p>Filling the research gap with a unified framework across speech, relationships, and action.</p>
+  </div>
+
+  <!-- SLIDE 6: Research Gap + Multi-Source -->
+  <div class="slide slide-content" data-idx="5">
+    <div class="topbar">Why Measure Coherence?</div>
+    <h2>The Research Gap</h2>
+    <div class="accent-line"></div>
+    <p style="margin-bottom:28px;">Existing instruments measure <em>related</em> constructs &mdash; authenticity, self-concordance, well-being, values congruence &mdash; but no single instrument captures the full picture of inner-outer alignment across all domains simultaneously.</p>
+    <h3 style="margin-top:0;">Multi-Source Assessment</h3>
+    <div class="multi-source">
+      <div class="source-box">
+        <div class="icon">&#128100;</div>
+        <div class="name">Self-Report</div>
+        <div class="desc">41 items &bull; Participant</div>
+      </div>
+      <div class="arrow-right">&rarr;</div>
+      <div class="source-box">
+        <div class="icon">&#128188;</div>
+        <div class="name">Workplace</div>
+        <div class="desc">8 items &bull; Colleagues</div>
+      </div>
+      <div class="arrow-right">&rarr;</div>
+      <div class="source-box">
+        <div class="icon">&#128106;</div>
+        <div class="name">Family</div>
+        <div class="desc">8 items &bull; Close ones</div>
+      </div>
+      <div class="arrow-right">&rarr;</div>
+      <div class="center-box">
+        <div class="name">Complete Picture</div>
+        <div class="desc">Gaps between sources = insight</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: Four Domains -->
+  <div class="slide slide-section" data-idx="6">
+    <p class="section-number">Section 3</p>
+    <h2>The Four Domains of Coherence</h2>
+    <p>How a person feels, speaks, relates, and acts.</p>
+  </div>
+
+  <!-- SLIDE 8: Domains Grid -->
+  <div class="slide slide-content" data-idx="7">
+    <div class="topbar">Four Domains</div>
+    <h2>The Coherence Framework</h2>
+    <div class="accent-line"></div>
+    <div class="cards">
+      <div class="card wellbeing">
+        <span class="tag">Domain 1 &bull; 14 self-report items</span>
+        <h4>Well-Being</h4>
+        <p>The degree of positive psychological functioning: optimism, energy, confidence, clarity, feeling loved and interested in life.</p>
+      </div>
+      <div class="card speech">
+        <span class="tag">Domain 2 &bull; 8 self-report items</span>
+        <h4>Speech Alignment</h4>
+        <p>Whether spoken words match genuine thoughts and feelings. Honest opinions, consistent messaging, saying what one means without censoring for others' reactions.</p>
+      </div>
+      <div class="card relationship">
+        <span class="tag">Domain 3 &bull; 8 self-report items</span>
+        <h4>Relationship Alignment</h4>
+        <p>Whether relational behavior reflects the authentic self. Showing who you truly are, not curating a version, not maintaining connections from obligation.</p>
+      </div>
+      <div class="card action">
+        <span class="tag">Domain 4 &bull; 11 self-report items</span>
+        <h4>Action Alignment</h4>
+        <p>Whether daily actions, choices, habits, and goals reflect stated values. The most concrete and observable expression of inner-outer congruence.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: Response Scale -->
+  <div class="slide slide-content" data-idx="8">
+    <div class="topbar">Section 4</div>
+    <h2>Response Scale</h2>
+    <div class="accent-line"></div>
+    <p style="margin-bottom:8px;">All four surveys use the same 5-point frequency scale for direct comparability.</p>
+    <p style="margin-bottom:8px; font-weight:600; color:#2c4a7c;">Time frame: Respondents must consider the last 2 weeks when responding.</p>
+    <div class="scale-row">
+      <div class="scale-item" style="background:#dc2626;">
+        <div class="num">1</div>
+        <div class="lbl">None of<br>the time</div>
+      </div>
+      <div class="scale-item" style="background:#f97316;">
+        <div class="num">2</div>
+        <div class="lbl">Rarely</div>
+      </div>
+      <div class="scale-item" style="background:#eab308;">
+        <div class="num">3</div>
+        <div class="lbl">Some of<br>the time</div>
+      </div>
+      <div class="scale-item" style="background:#22c55e;">
+        <div class="num">4</div>
+        <div class="lbl">Often</div>
+      </div>
+      <div class="scale-item" style="background:#2c4a7c;">
+        <div class="num">5</div>
+        <div class="lbl">All of<br>the time</div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top:16px;">
+      <p><strong>Stem:</strong> "I've been..." (self-report & pulse) or "[Name] has been..." (observer)<br>
+      <strong>Reverse-scored items [R]:</strong> Recoded as 6 minus response value. Higher scores always = greater coherence.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: Survey A Overview -->
+  <div class="slide slide-section" data-idx="9">
+    <p class="section-number">Survey A</p>
+    <h2>Participant Self-Report</h2>
+    <p>41 items across 4 domains &mdash; the core instrument of the battery.</p>
+  </div>
+
+  <!-- SLIDE 11: Survey A - Well-Being Items -->
+  <div class="slide slide-content" data-idx="10">
+    <div class="topbar">Survey A &bull; Self-Report</div>
+    <h2>Well-Being Items (1&ndash;14)</h2>
+    <div class="accent-line"></div>
+    <p style="margin:8px 0 16px;font-size:1.08rem;color:#64748b;"><em>In the past two weeks&hellip;</em></p>
+    <div class="scroll-area">
+      <table class="items-table">
+        <thead><tr><th>#</th><th>Item</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>I've been feeling optimistic about the future</td></tr>
+          <tr><td>2</td><td>I've been feeling useful</td></tr>
+          <tr><td>3</td><td>I've been feeling relaxed</td></tr>
+          <tr><td>4</td><td>I've been feeling interested in other people</td></tr>
+          <tr><td>5</td><td>I've had energy to spare</td></tr>
+          <tr><td>6</td><td>I've been dealing with problems well</td></tr>
+          <tr><td>7</td><td>I've been thinking clearly</td></tr>
+          <tr><td>8</td><td>I've been feeling good about myself</td></tr>
+          <tr><td>9</td><td>I've been feeling close to other people</td></tr>
+          <tr><td>10</td><td>I've been feeling confident</td></tr>
+          <tr><td>11</td><td>I've been able to make up my own mind about things</td></tr>
+          <tr><td>12</td><td>I've been feeling loved</td></tr>
+          <tr><td>13</td><td>I've been interested in new things</td></tr>
+          <tr><td>14</td><td>I've been feeling cheerful</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SLIDE 12: Survey A - Speech & Relationship Items -->
+  <div class="slide slide-content" data-idx="11">
+    <div class="topbar">Survey A &bull; Self-Report</div>
+    <h2>Speech & Relationship Alignment</h2>
+    <div class="accent-line"></div>
+    <div class="scroll-area">
+      <h3 style="margin-top:0;">Speech Alignment (15&ndash;22)</h3>
+      <p style="margin:4px 0 12px;font-size:1.08rem;color:#64748b;"><em>In the past two weeks&hellip;</em></p>
+      <table class="items-table" style="margin-bottom:28px;">
+        <thead><tr><th>#</th><th>Item</th></tr></thead>
+        <tbody>
+          <tr><td>15</td><td>I've been expressing my honest opinion even when others might disagree</td></tr>
+          <tr><td>16</td><td>I've been saying things I genuinely mean when I speak</td></tr>
+          <tr><td>17 <span class="reverse">[R]</span></td><td>I've been holding back what I really think to avoid conflict or judgment</td></tr>
+          <tr><td>18</td><td>I've been speaking in a way that reflects my true thoughts and feelings</td></tr>
+          <tr><td>19 <span class="reverse">[R]</span></td><td>I've been telling people what they want to hear rather than what I believe</td></tr>
+          <tr><td>20 <span class="reverse">[R]</span></td><td>I've been softening what I really think so others won't be upset</td></tr>
+          <tr><td>21</td><td>I've been verbally expressing my honest reactions to things</td></tr>
+          <tr><td>22</td><td>I've been speaking up when something bothers me rather than keeping it to myself</td></tr>
+        </tbody>
+      </table>
+      <h3>Relationship Alignment (23&ndash;30)</h3>
+      <p style="margin:4px 0 12px;font-size:1.08rem;color:#64748b;"><em>In the past two weeks&hellip;</em></p>
+      <table class="items-table">
+        <thead><tr><th>#</th><th>Item</th></tr></thead>
+        <tbody>
+          <tr><td>23</td><td>I've been showing people who I really am rather than a masked version of myself</td></tr>
+          <tr><td>24 <span class="reverse">[R]</span></td><td>I've been maintaining relationships mostly out of obligation rather than genuine connection</td></tr>
+          <tr><td>25</td><td>I've been letting the people in my life see my true self</td></tr>
+          <tr><td>26</td><td>I've been feeling comfortable being fully myself around others</td></tr>
+          <tr><td>27 <span class="reverse">[R]</span></td><td>I've been acting differently around certain people to fit in or be accepted</td></tr>
+          <tr><td>28</td><td>I've been spending time with people who reflect who I truly am</td></tr>
+          <tr><td>29</td><td>I've been letting the people closest to me know what I'm really going through</td></tr>
+          <tr><td>30 <span class="reverse">[R]</span></td><td>I've been going through the motions in some of my relationships</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SLIDE 13: Survey A - Action Alignment -->
+  <div class="slide slide-content" data-idx="12">
+    <div class="topbar">Survey A &bull; Self-Report</div>
+    <h2>Action Alignment (31&ndash;41)</h2>
+    <div class="accent-line"></div>
+    <p style="margin:4px 0 10px;font-size:1.08rem;color:#64748b;"><em>In the past two weeks&hellip;</em></p>
+    <div class="scroll-area">
+      <table class="items-table">
+        <thead><tr><th>#</th><th>Item</th></tr></thead>
+        <tbody>
+          <tr><td>31</td><td>I've been acting in ways that reflect what I value</td></tr>
+          <tr><td>32 <span class="reverse">[R]</span></td><td>I've been doing things mainly because others expect me to, not because I want to</td></tr>
+          <tr><td>33</td><td>I've been setting goals from what matters most to me</td></tr>
+          <tr><td>34</td><td>I've been doing what I say I am going to do</td></tr>
+          <tr><td>35 <span class="reverse">[R]</span></td><td>I've been going through daily life feeling disconnected from my sense of self</td></tr>
+          <tr><td>36</td><td>My daily habits reflects what I care about most</td></tr>
+          <tr><td>37</td><td>I've been showing up in ways that matters to me</td></tr>
+          <tr><td>38</td><td>I've been acting in line with my core beliefs and values</td></tr>
+          <tr><td>39 <span class="reverse">[R]</span></td><td>I've been noticing that what I actually do day-to-day doesn't match my values</td></tr>
+          <tr><td>40</td><td>I've been making choices based on my own values rather than external pressure</td></tr>
+          <tr><td>41</td><td>I've been spending my time on the things I believe matter most to me</td></tr>
+        </tbody>
+      </table>
+      <div class="stats-row" style="margin-top:16px;">
+        <div class="stat-box"><div class="big">41</div><div class="label">Total Items</div></div>
+        <div class="stat-box"><div class="big">9</div><div class="label">Reverse-Scored</div></div>
+        <div class="stat-box"><div class="big">4</div><div class="label">Domains</div></div>
+        <div class="stat-box"><div class="big">2</div><div class="label">Administrations</div></div>
+        <div class="stat-box"><div class="big">~6</div><div class="label">Minutes to Fill</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 14: Observer Surveys -->
+  <div class="slide slide-section" data-idx="13">
+    <p class="section-number">Surveys B & C</p>
+    <h2>Observer Surveys</h2>
+    <p>8 items each &mdash; Workplace and Family perspectives on coherence.</p>
+  </div>
+
+  <!-- SLIDE 15: Colleagues -->
+  <div class="slide slide-content" data-idx="14">
+    <div class="topbar">Survey B &bull; Colleagues</div>
+    <h2>Colleagues (8 Items)</h2>
+    <div class="accent-line"></div>
+    <p style="margin-bottom:16px;">Completed by 2 colleagues selected by the participant. Under 2 minutes. Same frequency scale.</p>
+    <table class="items-table" style="max-width:920px;">
+      <thead><tr><th>#</th><th style="width:140px;">Domain</th><th>Item</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><span class="domain-badge wb">Well-Being</span></td><td>[Name] has seemed energized and in good spirits</td></tr>
+        <tr><td>2</td><td><span class="domain-badge wb">Well-Being</span></td><td>[Name] has appeared confident and at ease with themselves at work</td></tr>
+        <tr><td>3</td><td><span class="domain-badge sa">Speech</span></td><td>[Name] has been saying what they genuinely think, even when it is not the popular view</td></tr>
+        <tr><td>4</td><td><span class="domain-badge sa">Speech</span></td><td>[Name] has been communicating the same core message regardless of who they are talking to</td></tr>
+        <tr><td>5</td><td><span class="domain-badge ra">Relationship</span></td><td>[Name] has seemed comfortable being themselves around colleagues</td></tr>
+        <tr><td>6</td><td><span class="domain-badge ra">Relationship</span></td><td>[Name] has been genuine in their interactions rather than going through the motions</td></tr>
+        <tr><td>7</td><td><span class="domain-badge aa">Action</span></td><td>[Name]'s actions at work have seemed to match what they say they value</td></tr>
+        <tr><td>8</td><td><span class="domain-badge aa">Action</span></td><td>[Name] has been making choices based on their own judgment and priorities rather than just following what is expected</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SLIDE 16: Family Observer -->
+  <div class="slide slide-content" data-idx="15">
+    <div class="topbar">Survey C &bull; Family & Close Ones Observer</div>
+    <h2>Family Observer (8 Items)</h2>
+    <div class="accent-line"></div>
+    <p style="margin-bottom:16px;">Completed by 2 family members or close friends selected by the participant. Warmer, more personal language.</p>
+    <table class="items-table" style="max-width:920px;">
+      <thead><tr><th>#</th><th style="width:140px;">Domain</th><th>Item</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><span class="domain-badge wb">Well-Being</span></td><td>[Name] has seemed relaxed and at ease with themselves</td></tr>
+        <tr><td>2</td><td><span class="domain-badge wb">Well-Being</span></td><td>[Name] has seemed energized and hopeful about their life</td></tr>
+        <tr><td>3</td><td><span class="domain-badge sa">Speech</span></td><td>[Name] has been expressing what they really think, even on difficult or sensitive topics</td></tr>
+        <tr><td>4</td><td><span class="domain-badge sa">Speech</span></td><td>[Name] has been speaking honestly rather than holding back to avoid conflict or keep the peace</td></tr>
+        <tr><td>5</td><td><span class="domain-badge ra">Relationship</span></td><td>[Name] has been letting the people close to them see who they truly are, including their struggles</td></tr>
+        <tr><td>6</td><td><span class="domain-badge ra">Relationship</span></td><td>[Name]'s relationships have seemed driven by genuine connection rather than obligation or habit</td></tr>
+        <tr><td>7</td><td><span class="domain-badge aa">Action</span></td><td>[Name] has been spending their time and energy on what they say truly matters to them</td></tr>
+        <tr><td>8</td><td><span class="domain-badge aa">Action</span></td><td>[Name]'s daily habits and choices have seemed to reflect their core beliefs and values</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SLIDE 17: Weekly Pulse -->
+  <div class="slide slide-section" data-idx="16">
+    <p class="section-number">Survey D</p>
+    <h2>Weekly Coherence Pulse</h2>
+    <p>5 items. 10 seconds. Every week. Tracking the trajectory of change.</p>
+  </div>
+
+  <!-- SLIDE 18: Pulse Items -->
+  <div class="slide slide-content" data-idx="17">
+    <div class="topbar">Survey D &bull; Weekly Pulse</div>
+    <h2>Weekly Pulse (5 Items)</h2>
+    <div class="accent-line"></div>
+    <p style="margin-bottom: 20px; font-style:italic; color:#6a7a90;">"Take a breath. Reflect on this past week. Answer quickly and honestly &mdash; your first instinct is the right one."</p>
+    <table class="items-table" style="max-width:800px;">
+      <thead><tr><th>#</th><th style="width:160px;">Domain</th><th>Item</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><span class="domain-badge wb">Well-Being</span></td><td>I have been feeling good about myself and my life</td></tr>
+        <tr><td>2</td><td><span class="domain-badge sa">Speech</span></td><td>I have been saying what I genuinely think and mean</td></tr>
+        <tr><td>3</td><td><span class="domain-badge ra">Relationship</span></td><td>I have been showing the people around me who I really am</td></tr>
+        <tr><td>4</td><td><span class="domain-badge aa">Action</span></td><td>My actions this week have reflected what truly matters to me</td></tr>
+        <tr><td>5</td><td><span class="domain-badge oc">Overall</span></td><td>I have been living in a way that feels like the real me</td></tr>
+      </tbody>
+    </table>
+    <h3 style="margin-top:28px;">What the Pulse Data Reveals</h3>
+    <ul>
+      <li>Which program module produced the largest shift in each domain</li>
+      <li>Whether certain domains shift before others</li>
+      <li>Whether progress is steady, stepwise, or includes dips before gains</li>
+      <li>Individual patterns for personalized coaching</li>
+    </ul>
+  </div>
+
+  <!-- SLIDE 19: Administration -->
+  <div class="slide slide-content" data-idx="18">
+    <div class="topbar">Section 9</div>
+    <h2>Administration Overview</h2>
+    <div class="accent-line"></div>
+    <table class="slide-table" style="margin-bottom:28px;">
+      <thead><tr><th>Survey</th><th>Completed By</th><th>When</th><th>Frequency</th></tr></thead>
+      <tbody>
+        <tr><td><strong>A: Self-Report</strong> (41 items)</td><td>Participant</td><td>Intake + Completion</td><td>2 times</td></tr>
+        <tr><td><strong>B: Colleagues</strong> (8 items)</td><td>2 colleagues</td><td>Intake + Completion</td><td>2 times</td></tr>
+        <tr><td><strong>C: Family Observer</strong> (8 items)</td><td>2 family/friends</td><td>Intake + Completion</td><td>2 times</td></tr>
+        <tr><td><strong>D: Weekly Pulse</strong> (5 items)</td><td>Participant</td><td>Weekly (Wk 2&ndash;11)</td><td>10 times</td></tr>
+      </tbody>
+    </table>
+    <div class="two-col">
+      <div>
+        <h3 style="margin-top:0;">Observer Selection</h3>
+        <ul>
+          <li><strong>Work:</strong> 2 colleagues selected by the participant</li>
+          <li><strong>Family:</strong> 2 close personal contacts selected by the participant</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="margin-top:0;">Key Design Choices</h3>
+        <ul>
+          <li>Personalized with participant's first name</li>
+          <li>Observer responses fully confidential</li>
+          <li>Delivered digitally via Typeform</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<!-- Navigation -->
+<div class="nav">
+  <button class="nav-btn" id="prevBtn" onclick="go(-1)">&larr; Previous</button>
+  <span class="nav-counter" id="counter">1 / 20</span>
+  <button class="nav-btn" id="nextBtn" onclick="go(1)">Next &rarr;</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let cur = 0;
+
+  function show(i) {
+    slides.forEach(s => s.classList.remove('active'));
+    slides[i].classList.add('active');
+    document.getElementById('counter').textContent = (i + 1) + ' / ' + total;
+    document.getElementById('prevBtn').disabled = i === 0;
+    document.getElementById('nextBtn').disabled = i === total - 1;
+    document.getElementById('progress').style.width = ((i + 1) / total * 100) + '%';
+  }
+
+  function go(dir) {
+    const next = cur + dir;
+    if (next >= 0 && next < total) { cur = next; show(cur); }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    if (e.key === 'Home') { e.preventDefault(); cur = 0; show(cur); }
+    if (e.key === 'End') { e.preventDefault(); cur = total - 1; show(cur); }
+  });
+
+  // Touch swipe support
+  let touchStartX = 0;
+  let touchStartY = 0;
+  document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx < 0) go(1);
+      else go(-1);
+    }
+  }, { passive: true });
+
+  show(0);
+</script>
+
+</body>
+</html>
