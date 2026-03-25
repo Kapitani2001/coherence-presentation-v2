@@ -758,6 +758,214 @@
     .accent-line {
       margin-bottom: 16px;
     }
+
+    /* #1: Convert item tables to card layout */
+    .items-table {
+      display: block;
+      overflow-x: visible;
+    }
+    .items-table thead { display: none; }
+    .items-table tbody { display: flex; flex-direction: column; gap: 8px; }
+    .items-table tr {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      background: #f4f7fc;
+      border-radius: 10px;
+      padding: 10px 14px;
+      gap: 10px;
+      border-bottom: none !important;
+    }
+    .items-table tr:nth-child(even) { background: #eef2fb; }
+    .items-table td {
+      display: block;
+      padding: 0 !important;
+      border-bottom: none !important;
+      background: none !important;
+      white-space: normal !important;
+      min-width: 0 !important;
+    }
+    .items-table td:first-child {
+      font-weight: 700;
+      color: #2c4a7c;
+      font-size: 0.82rem;
+      min-width: 28px !important;
+      flex-shrink: 0;
+      padding-top: 1px !important;
+    }
+    .items-table td:last-child {
+      flex: 1;
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+    /* For 3-column observer tables, hide domain column on mobile */
+    .items-table td:nth-child(2):not(:last-child) {
+      display: none;
+    }
+
+    /* #3: Move suggest button into nav on mobile */
+    .suggest-toggle {
+      position: static;
+      order: 2;
+      padding: 6px 12px;
+      font-size: 0.75rem;
+      box-shadow: none;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+    }
+    .suggest-toggle.active {
+      background: #dc2626;
+    }
+
+    /* #4: Reduce section slide padding */
+    .slide-section, .slide-title {
+      padding: 40px 24px 80px;
+      justify-content: flex-start;
+      padding-top: 25vh;
+    }
+
+    /* #6: Make suggest modal scrollable + #9: Bottom sheet on mobile */
+    .suggest-overlay {
+      align-items: flex-end;
+    }
+    .suggest-modal {
+      width: 100%;
+      max-width: 100%;
+      border-radius: 20px 20px 0 0;
+      padding: 24px 20px 32px;
+      max-height: 85vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    /* #7: Prevent zoom on input focus */
+    .suggest-modal textarea,
+    .suggest-modal input[type="text"] {
+      font-size: 16px;
+    }
+
+    /* #8: Landscape hint */
+    .landscape-hint {
+      display: none;
+    }
+  }
+
+  /* #5: Extra small screens */
+  @media (max-width: 380px) {
+    .slide {
+      padding: 18px 14px 76px;
+    }
+    .slide-content {
+      padding: 18px 14px 76px;
+    }
+    .slide-content h2 {
+      font-size: 1.3rem;
+    }
+    .slide-title h1 {
+      font-size: 1.8rem;
+    }
+    .slide-section h2 {
+      font-size: 1.5rem;
+    }
+    .card {
+      padding: 14px 12px;
+    }
+    .stat-box {
+      min-width: 75px;
+      padding: 10px 10px;
+    }
+    .stat-box .big {
+      font-size: 1.3rem;
+    }
+    .items-table td:first-child {
+      font-size: 0.75rem;
+    }
+    .items-table td:last-child {
+      font-size: 0.82rem;
+    }
+    .nav {
+      padding: 0 10px;
+      height: 46px;
+    }
+  }
+
+  /* #8: Landscape hint overlay */
+  @media (max-width: 768px) and (orientation: portrait) {
+    .landscape-hint {
+      display: flex;
+      position: fixed;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(26,39,68,0.9);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      z-index: 150;
+      gap: 8px;
+      align-items: center;
+      backdrop-filter: blur(8px);
+      transition: opacity 0.5s;
+      pointer-events: none;
+    }
+    .landscape-hint.hidden {
+      opacity: 0;
+    }
+    .landscape-hint .rotate-icon {
+      font-size: 1.1rem;
+    }
+  }
+
+  /* #2: Swipe hint */
+  .swipe-hint {
+    display: none;
+  }
+  @media (max-width: 768px) {
+    .swipe-hint {
+      display: flex;
+      position: fixed;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(26,39,68,0.85);
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      z-index: 150;
+      backdrop-filter: blur(8px);
+      transition: opacity 0.5s;
+      pointer-events: none;
+    }
+    .swipe-hint.hidden {
+      opacity: 0;
+    }
+  }
+
+  /* Nav suggest button — hidden on desktop (uses top-right button), shown on mobile */
+  .nav-suggest {
+    display: none;
+  }
+  @media (max-width: 768px) {
+    .nav-suggest {
+      display: block;
+      position: static;
+      padding: 6px 12px;
+      font-size: 0.75rem;
+      border-radius: 6px;
+      box-shadow: none;
+    }
+    /* Hide the fixed top-right button on mobile */
+    #suggestToggle {
+      display: none;
+    }
   }
 
   /* ---- Suggest Edit Feature ---- */
@@ -986,6 +1194,17 @@
 <div class="suggest-toast" id="suggestToast">Suggestion submitted — thank you!</div>
 
 <div class="progress-bar" id="progress"></div>
+
+<!-- #2: Swipe indicator -->
+<div class="swipe-hint" id="swipeHint">
+  <span>Swipe to navigate</span>
+</div>
+
+<!-- #8: Landscape hint -->
+<div class="landscape-hint" id="landscapeHint">
+  <span class="rotate-icon">&#x21BB;</span>
+  <span>Rotate for best experience</span>
+</div>
 
 <div class="deck" id="deck">
 
@@ -1400,6 +1619,7 @@
 <div class="nav">
   <button class="nav-btn" id="prevBtn" onclick="go(-1)">&larr; Previous</button>
   <span class="nav-counter" id="counter">1 / 20</span>
+  <button class="suggest-toggle nav-suggest" id="suggestToggleNav" onclick="toggleSuggestMode()">Suggest Edit</button>
   <button class="nav-btn" id="nextBtn" onclick="go(1)">Next &rarr;</button>
 </div>
 
@@ -1440,6 +1660,7 @@
   // Touch swipe support
   let touchStartX = 0;
   let touchStartY = 0;
+  let swipeHintDismissed = false;
   document.addEventListener('touchstart', e => {
     touchStartX = e.changedTouches[0].screenX;
     touchStartY = e.changedTouches[0].screenY;
@@ -1450,8 +1671,32 @@
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
       if (dx < 0) go(1);
       else go(-1);
+      // Dismiss swipe hint on first swipe
+      if (!swipeHintDismissed) {
+        swipeHintDismissed = true;
+        const hint = document.getElementById('swipeHint');
+        if (hint) hint.classList.add('hidden');
+        setTimeout(function() { if (hint) hint.style.display = 'none'; }, 500);
+      }
     }
   }, { passive: true });
+
+  // Dismiss landscape hint after 4 seconds
+  setTimeout(function() {
+    const lh = document.getElementById('landscapeHint');
+    if (lh) lh.classList.add('hidden');
+    setTimeout(function() { if (lh) lh.style.display = 'none'; }, 500);
+  }, 4000);
+
+  // Dismiss swipe hint after 5 seconds if not already
+  setTimeout(function() {
+    if (!swipeHintDismissed) {
+      swipeHintDismissed = true;
+      const hint = document.getElementById('swipeHint');
+      if (hint) hint.classList.add('hidden');
+      setTimeout(function() { if (hint) hint.style.display = 'none'; }, 500);
+    }
+  }, 5000);
 
   show(0);
 
@@ -1465,10 +1710,15 @@
   function toggleSuggestMode() {
     suggestMode = !suggestMode;
     document.body.classList.toggle('suggest-mode', suggestMode);
+    // Sync both buttons (desktop top-right + mobile nav)
+    ['suggestToggle', 'suggestToggleNav'].forEach(function(id) {
+      const btn = document.getElementById(id);
+      if (!btn) return;
+      btn.classList.toggle('active', suggestMode);
+      btn.textContent = suggestMode ? 'Exit Edit Mode' : 'Suggest Edit';
+    });
+    // Re-apply dynamic color on desktop button
     const btn = document.getElementById('suggestToggle');
-    btn.classList.toggle('active', suggestMode);
-    btn.textContent = suggestMode ? 'Exit Edit Mode' : 'Suggest Edit';
-    // Re-apply dynamic color
     const activeSlide = slides[cur];
     const isDark = activeSlide.classList.contains('slide-title') || activeSlide.classList.contains('slide-section') || activeSlide.classList.contains('slide-end');
     if (suggestMode) {
