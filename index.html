@@ -971,7 +971,7 @@
     <label>Original Text</label>
     <div class="original-text" id="suggestOriginal"></div>
     <label>Your Suggested Edit</label>
-    <textarea id="suggestText" placeholder="Type your suggested change here..."></textarea>
+    <textarea id="suggestText" placeholder="Write how you think this text should read instead..."></textarea>
     <label>Your Name</label>
     <input type="text" id="suggestName" placeholder="Optional">
     <div class="suggest-actions">
@@ -1535,7 +1535,8 @@
     selectedOriginal = text;
     document.getElementById('suggestOriginal').textContent = text;
     document.getElementById('suggestSlide').textContent = 'Slide ' + (cur + 1);
-    document.getElementById('suggestText').value = text;
+    document.getElementById('suggestText').value = '';
+    document.getElementById('suggestName').value = '';
     document.getElementById('suggestOverlay').classList.add('open');
     document.getElementById('suggestText').focus();
   });
