@@ -1426,6 +1426,9 @@
   }
 
   document.addEventListener('keydown', e => {
+    // Don't capture keys when typing in inputs
+    if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+    if (document.getElementById('suggestOverlay').classList.contains('open')) return;
     if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(1); }
     if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
     if (e.key === 'Home') { e.preventDefault(); cur = 0; show(cur); }
