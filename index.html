@@ -803,20 +803,6 @@
       display: none;
     }
 
-    /* #3: Move suggest button into nav on mobile */
-    .suggest-toggle {
-      position: static;
-      order: 2;
-      padding: 6px 12px;
-      font-size: 0.75rem;
-      box-shadow: none;
-      background: rgba(255,255,255,0.15);
-      color: #fff;
-    }
-    .suggest-toggle.active {
-      background: #dc2626;
-    }
-
     /* #4: Reduce section slide padding */
     .slide-section, .slide-title {
       padding: 40px 24px 80px;
@@ -848,10 +834,6 @@
       font-size: 16px;
     }
 
-    /* #8: Landscape hint */
-    .landscape-hint {
-      display: none;
-    }
   }
 
   /* #5: Extra small screens */
@@ -893,34 +875,6 @@
     }
   }
 
-  /* #8: Landscape hint overlay */
-  @media (max-width: 768px) and (orientation: portrait) {
-    .landscape-hint {
-      display: flex;
-      position: fixed;
-      bottom: 60px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(26,39,68,0.9);
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-size: 0.78rem;
-      font-weight: 500;
-      z-index: 150;
-      gap: 8px;
-      align-items: center;
-      backdrop-filter: blur(8px);
-      transition: opacity 0.5s;
-      pointer-events: none;
-    }
-    .landscape-hint.hidden {
-      opacity: 0;
-    }
-    .landscape-hint .rotate-icon {
-      font-size: 1.1rem;
-    }
-  }
 
   /* #2: Swipe hint */
   .swipe-hint {
@@ -949,23 +903,9 @@
     }
   }
 
-  /* Nav suggest button — hidden on desktop (uses top-right button), shown on mobile */
+  /* Nav suggest button — hidden everywhere, only top-right button used */
   .nav-suggest {
     display: none;
-  }
-  @media (max-width: 768px) {
-    .nav-suggest {
-      display: block;
-      position: static;
-      padding: 6px 12px;
-      font-size: 0.75rem;
-      border-radius: 6px;
-      box-shadow: none;
-    }
-    /* Hide the fixed top-right button on mobile */
-    #suggestToggle {
-      display: none;
-    }
   }
 
   /* ---- Suggest Edit Feature ---- */
@@ -1200,11 +1140,6 @@
   <span>Swipe to navigate</span>
 </div>
 
-<!-- #8: Landscape hint -->
-<div class="landscape-hint" id="landscapeHint">
-  <span class="rotate-icon">&#x21BB;</span>
-  <span>Rotate for best experience</span>
-</div>
 
 <div class="deck" id="deck">
 
@@ -1680,13 +1615,6 @@
       }
     }
   }, { passive: true });
-
-  // Dismiss landscape hint after 4 seconds
-  setTimeout(function() {
-    const lh = document.getElementById('landscapeHint');
-    if (lh) lh.classList.add('hidden');
-    setTimeout(function() { if (lh) lh.style.display = 'none'; }, 500);
-  }, 4000);
 
   // Dismiss swipe hint after 5 seconds if not already
   setTimeout(function() {
