@@ -758,9 +758,230 @@
       margin-bottom: 16px;
     }
   }
+
+  /* ---- Suggest Edit Feature ---- */
+  .suggest-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 200;
+    background: #2c4a7c;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .suggest-toggle:hover { background: #1a2744; }
+  .suggest-toggle.active {
+    background: #dc2626;
+  }
+  .suggest-toggle.active:hover { background: #b91c1c; }
+
+  body.suggest-mode .slide-content p,
+  body.suggest-mode .slide-content li,
+  body.suggest-mode .slide-content h2,
+  body.suggest-mode .slide-content h3,
+  body.suggest-mode .slide-content h4,
+  body.suggest-mode .slide-content td,
+  body.suggest-mode .card p,
+  body.suggest-mode .card h4,
+  body.suggest-mode .slide-section p,
+  body.suggest-mode .slide-section h2,
+  body.suggest-mode .slide-title .subtitle {
+    cursor: pointer;
+    transition: background 0.15s, outline 0.15s;
+    border-radius: 4px;
+  }
+  body.suggest-mode .slide-content p:hover,
+  body.suggest-mode .slide-content li:hover,
+  body.suggest-mode .slide-content h2:hover,
+  body.suggest-mode .slide-content h3:hover,
+  body.suggest-mode .slide-content h4:hover,
+  body.suggest-mode .slide-content td:hover,
+  body.suggest-mode .card p:hover,
+  body.suggest-mode .card h4:hover,
+  body.suggest-mode .slide-section p:hover,
+  body.suggest-mode .slide-section h2:hover,
+  body.suggest-mode .slide-title .subtitle:hover {
+    background: rgba(59,130,246,0.08);
+    outline: 2px solid rgba(59,130,246,0.3);
+    outline-offset: 2px;
+  }
+
+  .suggest-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+  }
+  .suggest-overlay.open { display: flex; }
+
+  .suggest-modal {
+    background: #fff;
+    border-radius: 16px;
+    padding: 32px;
+    width: 90%;
+    max-width: 520px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    position: relative;
+  }
+  .suggest-modal h3 {
+    font-size: 1.1rem;
+    color: #1a2744;
+    margin-bottom: 16px;
+    font-weight: 700;
+  }
+  .suggest-modal label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #6a7a90;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    margin-top: 14px;
+  }
+  .suggest-modal .original-text {
+    background: #f4f7fc;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 0.9rem;
+    color: #3a4a60;
+    line-height: 1.5;
+    border-left: 3px solid #2c4a7c;
+  }
+  .suggest-modal textarea {
+    width: 100%;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+  }
+  .suggest-modal textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+  }
+  .suggest-modal input[type="text"] {
+    width: 100%;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+  }
+  .suggest-modal input[type="text"]:focus {
+    outline: none;
+    border-color: #3b82f6;
+  }
+  .suggest-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: flex-end;
+  }
+  .suggest-actions button {
+    padding: 9px 22px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s;
+  }
+  .btn-cancel {
+    background: #f1f5f9;
+    color: #64748b;
+  }
+  .btn-cancel:hover { background: #e2e8f0; }
+  .btn-submit {
+    background: #2c4a7c;
+    color: #fff;
+  }
+  .btn-submit:hover { background: #1a2744; }
+  .btn-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .suggest-toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: #10b981;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    z-index: 400;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .suggest-toast.show {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .slide-badge {
+    font-size: 0.72rem;
+    color: #94a3b8;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  @media (max-width: 768px) {
+    .suggest-toggle {
+      top: 10px;
+      right: 10px;
+      padding: 6px 12px;
+      font-size: 0.75rem;
+    }
+    .suggest-modal {
+      padding: 24px 20px;
+      width: 94%;
+    }
+  }
 </style>
 </head>
 <body>
+
+<button class="suggest-toggle" id="suggestToggle" onclick="toggleSuggestMode()">Suggest Edit</button>
+
+<div class="suggest-overlay" id="suggestOverlay" onclick="if(event.target===this)closeSuggest()">
+  <div class="suggest-modal">
+    <h3>Suggest an Edit</h3>
+    <span class="slide-badge" id="suggestSlide"></span>
+    <label>Original Text</label>
+    <div class="original-text" id="suggestOriginal"></div>
+    <label>Your Suggested Edit</label>
+    <textarea id="suggestText" placeholder="Type your suggested change here..."></textarea>
+    <label>Your Name</label>
+    <input type="text" id="suggestName" placeholder="Optional">
+    <div class="suggest-actions">
+      <button class="btn-cancel" onclick="closeSuggest()">Cancel</button>
+      <button class="btn-submit" id="suggestSubmitBtn" onclick="submitSuggestion()">Submit</button>
+    </div>
+  </div>
+</div>
+
+<div class="suggest-toast" id="suggestToast">Suggestion submitted — thank you!</div>
 
 <div class="progress-bar" id="progress"></div>
 
@@ -1223,6 +1444,83 @@
   }, { passive: true });
 
   show(0);
+
+  // ---- Suggest Edit Feature ----
+  const SUGGEST_URL = 'https://script.google.com/macros/s/AKfycbzr9MQbbwMDMP_Vplc-2bHJUbE1S_LCq1svbqea2DGy9p78vQH2cRQhTPzEwUN351qA/exec';
+  let suggestMode = false;
+  let selectedOriginal = '';
+
+  function toggleSuggestMode() {
+    suggestMode = !suggestMode;
+    document.body.classList.toggle('suggest-mode', suggestMode);
+    const btn = document.getElementById('suggestToggle');
+    btn.classList.toggle('active', suggestMode);
+    btn.textContent = suggestMode ? 'Exit Edit Mode' : 'Suggest Edit';
+  }
+
+  function closeSuggest() {
+    document.getElementById('suggestOverlay').classList.remove('open');
+    document.getElementById('suggestText').value = '';
+  }
+
+  function showToast() {
+    const toast = document.getElementById('suggestToast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  function submitSuggestion() {
+    const suggestion = document.getElementById('suggestText').value.trim();
+    if (!suggestion) return;
+
+    const btn = document.getElementById('suggestSubmitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    const payload = {
+      slide: cur + 1,
+      original: selectedOriginal,
+      suggestion: suggestion,
+      name: document.getElementById('suggestName').value.trim() || 'Anonymous'
+    };
+
+    fetch(SUGGEST_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(() => {
+      closeSuggest();
+      showToast();
+      btn.disabled = false;
+      btn.textContent = 'Submit';
+    }).catch(() => {
+      btn.disabled = false;
+      btn.textContent = 'Submit';
+      alert('Failed to send. Please try again.');
+    });
+  }
+
+  // Delegate click events for suggest mode
+  document.addEventListener('click', function(e) {
+    if (!suggestMode) return;
+    const target = e.target;
+    const selectors = 'p, li, h2, h3, h4, td';
+    const el = target.closest('.slide.active ' + selectors);
+    if (!el) return;
+    // Ignore nav buttons and the toggle
+    if (target.closest('.nav') || target.closest('.suggest-toggle') || target.closest('.suggest-overlay')) return;
+
+    const text = el.innerText.trim();
+    if (!text || text.length < 3) return;
+
+    selectedOriginal = text;
+    document.getElementById('suggestOriginal').textContent = text;
+    document.getElementById('suggestSlide').textContent = 'Slide ' + (cur + 1);
+    document.getElementById('suggestText').value = text;
+    document.getElementById('suggestOverlay').classList.add('open');
+    document.getElementById('suggestText').focus();
+  });
 </script>
 
 </body>
